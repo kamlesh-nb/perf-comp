@@ -1,4 +1,5 @@
 dotnet core
+dotnet run --property:Configuration=Release
 wrk -c100 -d60s https://localhost:7028/weatherforecast
 cpu: 100%
 memory: 100mb

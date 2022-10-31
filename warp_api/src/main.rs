@@ -1,6 +1,6 @@
+use tokio::runtime::Builder;
+use warp::Filter;
 use chrono::{DateTime, Local, Duration};
-use tide::{prelude::*, Body};
-use tide::Request;
 use rand::Rng;
  
 
@@ -18,7 +18,7 @@ static SUMMARIES: [&str; 10] = [
     ];
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(serde::Serialize)]
 struct WeatherForecast {
     pub date: DateTime<Local>,
     pub temperature_c: i32,
@@ -26,17 +26,27 @@ struct WeatherForecast {
     pub summary: String,
 }
 
-#[async_std::main]
-async fn main() -> tide::Result<()> {
-    let mut app = tide::new();
-    app.at("/weatherforecast").get(get_weather_forecast);
-    app.listen("127.0.0.1:8080").await?;
-    Ok(())
+fn main() {
+    let logical_cpu_cores = num_cpus::get();
+
+    let runtime = Builder::new_multi_thread()
+        .enable_all()
+        .worker_threads(logical_cpu_cores)
+        .build()
+        .unwrap();
+
+    // Execute the future, blocking the current thread until completion
+    runtime.block_on(async {
+        let route = warp::path("weatherforecast")
+            .and(warp::path::end())
+            .map(|| warp::reply::json(&get_weather_forecast()));
+
+        warp::serve(route).run(([127, 0, 0, 1], 8081)).await;
+    });
 }
 
-async fn get_weather_forecast(_req: Request<()>) -> tide::http::Result<Body> {
+fn get_weather_forecast() -> Vec<WeatherForecast> {
 
-    let forecast = async_std::task::spawn_blocking(|| { 
         let mut forecast = Vec::with_capacity(5);
         for i in 1..6 {
             let c = rand::thread_rng().gen_range(-20..55);
@@ -55,7 +65,4 @@ async fn get_weather_forecast(_req: Request<()>) -> tide::http::Result<Body> {
            
         }
         forecast
-    }).await;
-    
-    Body::from_json(&forecast)
 }

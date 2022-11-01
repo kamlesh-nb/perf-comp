@@ -35,14 +35,17 @@ fn main() {
         .build()
         .unwrap();
 
-    // Execute the future, blocking the current thread until completion
+    // // Execute the future, blocking the current thread until completion
     runtime.block_on(async {
         let route = warp::path("weatherforecast")
             .and(warp::path::end())
             .map(|| warp::reply::json(&get_weather_forecast()));
 
         warp::serve(route).run(([127, 0, 0, 1], 8081)).await;
+
     });
+
+
 }
 
 fn get_weather_forecast() -> Vec<WeatherForecast> {
@@ -53,7 +56,7 @@ fn get_weather_forecast() -> Vec<WeatherForecast> {
             let f = f64::from(32) + (f64::from(c) / 0.5556);
             let e = rand::thread_rng().gen_range(0..9);
             let k = i as i64;
-    
+            
             forecast.push(
                 WeatherForecast {
                     date: chrono::Local::now() + Duration::days(k) ,

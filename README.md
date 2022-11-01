@@ -1,6 +1,6 @@
 dotnet core
 dotnet run --property:Configuration=Release
-wrk -c100 -d60s https://localhost:7028/weatherforecast
+oha http://localhost:5041/weatherforecast -z 60s
 cpu: 100%
 memory: 100mb
 
@@ -13,6 +13,10 @@ Transfer/sec:      9.14MB
 
 
 rust - tide
-wrk -c100 -d60s https://localhost:8080/weatherforecast
+oha http://localhost:8080/weatherforecast -z 60s
 cpu: 100%
 memory: 6mb
+
+
+rust - warp
+oha http://localhost:8081/weatherforecast -z 60s

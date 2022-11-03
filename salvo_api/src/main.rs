@@ -33,9 +33,9 @@ async fn main() {
  
     tracing_subscriber::fmt().init();
 
-    tracing::info!("Listening on http://127.0.0.1:7878");
+    tracing::info!("Listening on http://127.0.0.1:5041");
 
-    match TcpListener::try_bind("127.0.0.1:7878") {
+    match TcpListener::try_bind("127.0.0.1:5041") {
         Ok(listener) => Server::new(listener).serve(router).await,
         Err(e) => tracing::error!(error = ?e, "ddd"),
     }

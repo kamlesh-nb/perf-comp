@@ -21,7 +21,7 @@ COPY --from=cacher /usr/local/cargo /usr/local/cargo
 
 RUN cargo build --release
 
-EXPOSE 8080
+EXPOSE 5041
 
 FROM gcr.io/distroless/cc-debian11
 WORKDIR /app

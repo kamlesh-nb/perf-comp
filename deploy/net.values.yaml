@@ -1,0 +1,22 @@
+deployment:
+  image: "taugem/netcoreapi"
+  tag: "0.1.0"
+  name: "netcore-api-deployment"
+  label: "netcore-api"
+  limits:
+    cpu: 50m
+    memory: 64Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+service:
+  name: "netcore-api-service"
+  type: LoadBalancer
+  port: 8080
+  targetPort: 80
+
+hpa:
+  maxReplicas: 10  
+  minReplicas: 1  
+  targetCPUUtilizationPercentage: 20

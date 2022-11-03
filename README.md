@@ -20,3 +20,5 @@ memory: 6mb
 
 rust - warp
 oha http://localhost:8081/weatherforecast -z 60s
+
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret |grep default-token | awk '{print $1}')

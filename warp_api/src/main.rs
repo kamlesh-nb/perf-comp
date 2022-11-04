@@ -41,7 +41,7 @@ fn main() {
             .and(warp::path::end())
             .map(|| warp::reply::json(&get_weather_forecast()));
 
-        warp::serve(route).run(([127, 0, 0, 1], 5041)).await;
+        warp::serve(route).run(([0, 0, 0, 0], 5041)).await;
 
     });
 

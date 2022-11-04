@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: netcore-api-service
+  labels:
+    app: netcore-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: netcore-api
+  ports:
+  - port: 81
+    targetPort: 5041

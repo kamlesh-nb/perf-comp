@@ -1,24 +1,27 @@
-dotnet core
-dotnet run --property:Configuration=Release
-oha http://localhost:5041/weatherforecast -z 60s
-cpu: 100%
-memory: 100mb
+docker build -t netcoreapi:0.1.0 -f netcore_api/Dockerfile  .
+docker build -t salvoapi:0.1.0  .
+docker build -t warpapi:0.1.0  .
 
-Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     5.79ms    4.49ms 151.76ms   95.26%
-    Req/Sec     7.57k     1.25k    9.83k    81.04%
-  877438 requests in 1.00m, 549.18MB read
-Requests/sec:  14610.82
-Transfer/sec:      9.14MB
+wrk -t 6 -c 1000 -d 60s http://localhost:81/weatherforecast
+wrk -t 6 -c 1000 -d 60s http://localhost:82/weatherforecast
+wrk -t 6 -c 1000 -d 60s http://localhost:83/weatherforecast
+
+kubectl apply -f deploy/netcoreapi/ -n netcore
+kubectl apply -f deploy/salvoapi/ -n salvo
+kubectl apply -f deploy/warpapi/ -n warp
+
+kubectl logs metrics-server-847d45fd4f-6ddrn -n kube-system
+
+watch -n 2 kubectl get hpa -n netcore 
+watch -n 2 kubectl get pods -n netcore 
+watch -n 2 kubectl get hpa -n salvo 
+watch -n 2 kubectl get pods -n salvo   
+watch -n 2 kubectl get hpa -n warp  
+watch -n 2 kubectl get pods -n warp  
 
 
-rust - tide
-oha http://localhost:8080/weatherforecast -z 60s
-cpu: 100%
-memory: 6mb
 
 
-rust - warp
-oha http://localhost:8081/weatherforecast -z 60s
+kubectl run apache-bench -i --tty --rm --image=httpd -- ab -n 500000 -c 1000 http://10.108.224.188:81/weatherforecast 
 
-kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret |grep default-token | awk '{print $1}')
+kubectl run apache-bench -i --tty --rm --image=httpd -- ab -n 500000 -c 1000 http://10.102.181.103:83/weatherforecast

@@ -1,6 +1,7 @@
 #stage 1
 FROM rust:latest as planner
 WORKDIR /app
+
 RUN cargo install cargo-chef
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
@@ -21,11 +22,9 @@ COPY --from=cacher /usr/local/cargo /usr/local/cargo
 
 RUN cargo build --release
 
-EXPOSE 5041
-
 FROM gcr.io/distroless/cc-debian11
 WORKDIR /app
 
 COPY --from=builder /app/target/release/warp_api .
-
+EXPOSE 5041
 CMD ["./warp_api"]

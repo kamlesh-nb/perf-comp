@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warp-api-deployment
+  labels:
+    app: warp-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warp-api
+  template:
+    metadata:
+      labels:
+        app: warp-api
+    spec:
+      containers:
+      - name: warp-api
+        image: warpapi:0.1.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "32M"
+            cpu: "250m"
+          limits:
+            memory: "56M"
+            cpu: "500m"        

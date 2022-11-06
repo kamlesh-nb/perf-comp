@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gofiber-api-service
+  labels:
+    app: gofiber-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: gofiber-api
+  ports:
+  - port: 84
+    targetPort: 5041

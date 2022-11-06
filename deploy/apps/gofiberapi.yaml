@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gofiber-api-deployment
+  labels:
+    app: gofiber-api
+spec:
+  selector:
+    matchLabels:
+      app: gofiber-api
+  template:
+    metadata:
+      labels:
+        app: gofiber-api
+    spec:
+      containers:
+      - name: gofiber-api
+        image: taugem/gofiberapi:v0.1      
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gofiber-api-service
+  labels:
+    app: gofiber-api
+spec:
+  type: ClusterIP
+  selector:
+    app: gofiber-api
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5041

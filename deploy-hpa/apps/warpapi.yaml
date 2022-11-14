@@ -5,7 +5,7 @@ metadata:
   labels:
     app: warp-api
 spec:
-  replicas: 2 
+  replicas: 1
   selector:
     matchLabels:
       app: warp-api
@@ -16,14 +16,16 @@ spec:
     spec:
       containers:
       - name: warp-api
-        image: taugem/warpapi:v0.1    
+        image: taugem/warpapi:v0.1
+        ports:
+        - containerPort: 80
         resources:
           requests:
             memory: "8M"
             cpu: "50m"
           limits:
             memory: "16M"
-            cpu: "100m"  
+            cpu: "100m"        
 ---
 
 apiVersion: v1
@@ -39,4 +41,18 @@ spec:
   ports:
   - name: http
     port: 5041
-  sessionAffinity: ClientIP
+
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: warp-api-hpa
+spec:
+  maxReplicas: 4  
+  minReplicas: 1   
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: warp-api-deployment
+  targetCPUUtilizationPercentage: 80

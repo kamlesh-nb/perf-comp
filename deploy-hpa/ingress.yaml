@@ -37,20 +37,20 @@ spec:
             name: gofiber-api-service
             port:
               number: 5041
-      - path: /grafana/?(.*)
+      - path: /spring/?(.*)
         pathType: Prefix
         backend:
           service:
-            name: kube-prom-stack-grafana
+            name: spring-api-service
             port:
-              number: 80
-      - path: /prom/?(.*)
+              number: 5041
+      - path: /ntex/?(.*)
         pathType: Prefix
         backend:
           service:
-            name: prometheus-operated
+            name: ntex-api-service
             port:
-              number: 9090
+              number: 5041
 
 ---
 

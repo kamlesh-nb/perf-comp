@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntex-api-deployment
+  labels:
+    app: ntex-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntex-api
+  template:
+    metadata:
+      labels:
+        app: ntex-api
+    spec:
+      containers:
+      - name: ntex-api
+        image: taugem/ntexapi:v0.1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "32M"
+            cpu: "250m"
+          limits:
+            memory: "56M"
+            cpu: "500m"          
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ntex-api-service
+  labels:
+    app: ntex-api
+spec:
+  type: ClusterIP
+  selector:
+    app: ntex-api
+  ports:
+  - name: http
+    port: 5041
+
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ntex-api-hpa
+spec:
+  maxReplicas: 4  
+  minReplicas: 1   
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ntex-api-deployment
+  targetCPUUtilizationPercentage: 80

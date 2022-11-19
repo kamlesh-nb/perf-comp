@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gofiber-api-deployment
+  name: spring-api-deployment
   labels:
-    app: gofiber-api
+    app: spring-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gofiber-api
+      app: spring-api
   template:
     metadata:
       labels:
-        app: gofiber-api
+        app: spring-api
     spec:
       containers:
-      - name: gofiber-api
-        image: taugem/gofiberapi:v0.1      
+      - name: spring-api
+        image: taugem/springapi:v0.1      
         resources:
           requests:
-            memory: "8M"
+            memory: "128M"
             cpu: "250m"
           limits:
-            memory: "16M"
+            memory: "256M"
             cpu: "500m" 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: gofiber-api-service
+  name: spring-api-service
   labels:
-    app: gofiber-api
+    app: spring-api
 spec:
   type: ClusterIP
   selector:
-    app: gofiber-api
+    app: spring-api
   ports:
   - name: http
     protocol: TCP

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gofiber-api-deployment
+  name: ntex-api-deployment
   labels:
-    app: gofiber-api
+    app: ntex-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gofiber-api
+      app: ntex-api
   template:
     metadata:
       labels:
-        app: gofiber-api
+        app: ntex-api
     spec:
       containers:
-      - name: gofiber-api
-        image: taugem/gofiberapi:v0.1      
+      - name: ntex-api
+        image: taugem/ntextapi:v0.1      
         resources:
           requests:
             memory: "8M"
@@ -29,13 +29,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gofiber-api-service
+  name: ntex-api-service
   labels:
-    app: gofiber-api
+    app: ntex-api
 spec:
   type: ClusterIP
   selector:
-    app: gofiber-api
+    app: ntex-api
   ports:
   - name: http
     protocol: TCP

@@ -1,0 +1,74 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: perf-comp-api-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: public
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  defaultBackend:
+    service:
+      name: warp-api-service
+      port:
+        number: 5041
+  rules:
+  - host: microk8s.local
+    http:
+      paths:
+      - path: /net/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: netcore-api-service
+            port:
+              number: 5041
+      - path: /warp/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: warp-api-service
+            port:
+              number: 5041
+      - path: /fiber/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: gofiber-api-service
+            port:
+              number: 5041
+      - path: /spring/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: spring-api-service
+            port:
+              number: 5041
+      - path: /ntex/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: ntex-api-service
+            port:
+              number: 5041
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress
+spec:
+  selector:
+    name: nginx-ingress-microk8s
+  type: LoadBalancer
+  loadBalancerIP: 192.168.64.2
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443

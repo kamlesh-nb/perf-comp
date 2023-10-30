@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warp-api-deployment
+  labels:
+    app: warp-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warp-api
+  template:
+    metadata:
+      labels:
+        app: warp-api
+    spec:
+      containers:
+      - name: warp-api
+        image: taugem/warpapi:v0.1    
+        resources:
+          requests:
+            memory: "8M"
+            cpu: "250m"
+          limits:
+            memory: "16M"
+            cpu: "500m"  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: warp-api-service
+  labels:
+    app: warp-api
+spec:
+  type: ClusterIP
+  selector:
+    app: warp-api
+  ports:
+  - name: http
+    port: 5041
+  sessionAffinity: ClientIP

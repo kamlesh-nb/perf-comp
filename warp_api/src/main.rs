@@ -43,7 +43,7 @@ fn main() {
 
     // // Execute the future, blocking the current thread until completion
     runtime.block_on(async {
-        let route = warp::path("weatherforecast")
+        let route = warp::path("weather")
             .and(warp::path::end())
             .map(|| warp::reply::json(&get_weather_forecast()));
 

@@ -29,7 +29,7 @@ struct WeatherForecast {
  
 #[tokio::main]
 async fn main() {
-    let router = Router::with_path("weatherforecast").get(get_weather_forecast);
+    let router = Router::with_path("weather").get(get_weather_forecast);
  
     tracing_subscriber::fmt().init();
 

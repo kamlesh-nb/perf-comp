@@ -1,0 +1,16 @@
+[package]
+name = "ntex_api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num_cpus = "*"
+serde = { version = "*", features = ["derive"] }
+serde_json = "1.0.87"
+ntex = { version = "0.5", features = ["tokio"] }
+chrono = { version = "0.4", features = ["serde"] }
+rand = "0.8.5" 
+tracing = "0.1"
+tracing-subscriber = "0.3"

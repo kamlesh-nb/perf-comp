@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-api-deployment
+  labels:
+    app: spring-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-api
+  template:
+    metadata:
+      labels:
+        app: spring-api
+    spec:
+      containers:
+      - name: spring-api
+        image: taugem/springapi:v0.1      
+        resources:
+          requests:
+            memory: "128M"
+            cpu: "250m"
+          limits:
+            memory: "256M"
+            cpu: "500m" 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-api-service
+  labels:
+    app: spring-api
+spec:
+  type: ClusterIP
+  selector:
+    app: spring-api
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5041

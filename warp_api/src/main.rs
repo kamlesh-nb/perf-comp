@@ -1,8 +1,8 @@
 use tokio::runtime::Builder;
 use warp::Filter;
-use chrono::{DateTime, Local, Duration};
+use chrono::{DateTime, Utc, Local, Duration};
 use rand::Rng;
- 
+
 
 static SUMMARIES: [&str; 10] = [
     "Freezing",
@@ -24,6 +24,12 @@ struct WeatherForecast {
     pub temperature_c: i32,
     pub temperature_f: f64,
     pub summary: String,
+}
+
+#[derive(serde::Serialize)]
+struct TestStruct {
+    pub time: DateTime<Utc>,
+    pub name: String,
 }
 
 fn main() {
@@ -56,7 +62,7 @@ fn get_weather_forecast() -> Vec<WeatherForecast> {
             let f = f64::from(32) + (f64::from(c) / 0.5556);
             let e = rand::thread_rng().gen_range(0..9);
             let k = i as i64;
-            
+                        
             forecast.push(
                 WeatherForecast {
                     date: chrono::Local::now() + Duration::days(k) ,
